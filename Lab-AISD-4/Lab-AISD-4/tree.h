@@ -3,6 +3,7 @@ typedef struct node {
 	int value;
 	int depth;
 	int color; //1 - red, 2 - black
+	node* parent;
 	node* left;
 	node* right;
 } node;
@@ -12,7 +13,9 @@ typedef struct {
 	node* root;
 }tree;
 
-void add(node* tree, int value);
+void insert(tree* tree, int value);
+
+void fixInsertion(node* tree, bool is_root);
 
 void add_el(tree* t, int value);
 

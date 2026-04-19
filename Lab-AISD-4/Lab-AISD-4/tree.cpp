@@ -2,33 +2,65 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void add(node* tree, int value) {
-	if (tree->value < value) {
-		if (tree->right == NULL) {
-			tree->right = (node*)malloc(sizeof(node));
-			if (tree != NULL) {
-				tree->right->value = value;
-				tree->right->depth = tree->depth + 1;
-				tree->right->left = NULL;
-				tree->right->right = NULL;
+
+void fixInsertion(node* tree,bool is_root) {
+	if (is_root) {
+		tree->color = 2;
+		return;
+	}
+	while (tree->parent->color == 1) {
+		if (tree->parent->left == tree) {
+			if (tree->parent->parent != NULL && ((tree->parent->parent->left != NULL && tree->parent->parent->left != tree->parent && tree->parent->parent->left->color == 1) || (tree->parent->parent->right != NULL && tree->parent->parent->right != tree->parent && tree->parent->parent->right->color == 1))) {
+				//есть красный дядя
+				tree->parent->parent->color = 2;
+				if (tree->parent->parent->left != NULL && tree->parent->parent->left != tree->parent)
+					tree->parent->parent->left->color = 2;
+				else
+					tree->parent->parent->right->color = 2;
 			}
-			return;
+			else {
+				if()
+			}
 		}
-		add(tree->right, value);
+		else {
+
+		}
+	}
+}
+
+
+void insert(tree* tree, int value) {
+
+	node* t = (node*)malloc(sizeof(node));
+	t->color = 1;//red
+	t->value = value;
+	t->left = NULL;
+	t->right = NULL;
+	bool is_root = 1;
+
+	if (tree == NULL) {
+		tree->root = t;
+		tree->root->parent = NULL;
 	}
 	else {
-		if (tree->left == NULL) {
-			tree->left = (node*)malloc(sizeof(node));
-			if (tree != NULL) {
-				tree->left->value = value;
-				tree->left->depth = tree->depth + 1;
-				tree->left->left = NULL;
-				tree->left->right = NULL;
-			}
-			return;
+		node* p = tree->root;
+		node* q = NULL;
+
+		while(p != NULL){
+			q = p;
+			if (p->value < t->value)
+				p = p->right;
+			else
+				p = p->left;
 		}
-		add(tree->left, value);
+		t->parent = q;
+		if (q->value < t->value)
+			q->right = t;
+		else
+			q->left = t;
+		is_root = 0;
 	}
+	fixInsertion(t, is_root);
 }
 
 void add_el(tree* t, int value) {
@@ -46,7 +78,7 @@ void add_el(tree* t, int value) {
 	}
 	else {
 		t->size++;
-		add(t->root, value);
+		insert(t, value);
 	}
 }
 
