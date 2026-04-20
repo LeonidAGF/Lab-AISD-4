@@ -1,7 +1,8 @@
 #pragma once
 typedef struct node {
-	int value;
 	int color; //1 - red, 2 - black
+	double value;
+	char * key;
 	node* parent;
 	node* left;
 	node* right;
@@ -12,21 +13,21 @@ typedef struct {
 	node* root;
 }tree;
 
-void search(tree* t, int value);
+void search(tree* t, char * key);
 
 void rotate_left(node* tree);
 
 void rotate_right(node* tree);
 
-void insert(tree* tree, int value);
+void insert(tree* tree, char * key, double value);
 
 void fixInsertion(node* tree, bool is_root);
 
-void add_el(tree* t, int value);
+void add_el(tree* t, char * key, double value);
 
 void fixDeleting(tree* t, node* p, node* p_parent);
 
-void delete_value(tree* t, int value);
+void delete_value(tree* t, char * key);
 
 void print_node(node* node, int depth);
 

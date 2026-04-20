@@ -2,23 +2,23 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <string.h>
 
-void search(tree* t, int value) {
+void search(tree* t, char * key) {
 	node* p = t->root;
-	while (p != NULL && p->value != value) {
-		if (value < p->value)
+	while (p != NULL && p->key != key) {
+		if (strcmp(key, p->key)<0)
 			p = p->left;
 		else
 			p = p->right;
 	}
-	if(p!=NULL && p->value==value)
-		printf("%d", p->value);
+	if(p!=NULL && p->key==key)
+		printf("%s %lf", p->key,p->value);
 	else
 		printf("not found");
 }
 
-void rotate_left(node* n)
-{
+void rotate_left(node* n) {
 	if (n == NULL || n->right == NULL)
 		return;
 	node* p = n->right;
@@ -39,8 +39,7 @@ void rotate_left(node* n)
 	p->left = n;
 }
 
-void rotate_right(node* n)
-{
+void rotate_right(node* n) {
 	if (n == NULL || n->left == NULL)
 		return;
 	node* p = n->left;
@@ -121,10 +120,11 @@ void fixInsertion(node* tree,bool is_root) {
 }
 
 
-void insert(tree* tree, int value) {
+void insert(tree* tree, char* key, double value) {
 
 	node* t = (node*)malloc(sizeof(node));
 	t->color = 1;//red
+	t->key = key;
 	t->value = value;
 	t->left = NULL;
 	t->right = NULL;
@@ -140,13 +140,13 @@ void insert(tree* tree, int value) {
 
 		while(p != NULL){
 			q = p;
-			if (p->value < t->value)
+			if (strcmp(p->key, t->key)<0)
 				p = p->right;
 			else
 				p = p->left;
 		}
 		t->parent = q;
-		if (q->value < t->value)
+		if (strcmp(q->key, t->key) < 0)
 			q->right = t;
 		else
 			q->left = t;
@@ -158,24 +158,24 @@ void insert(tree* tree, int value) {
 	}
 }
 
-void add_el(tree* t, int value) {
+void add_el(tree* t, char* key, double value) {
 	if (t->root == NULL) {
 		t->size++;
 		node* n = (node*)malloc(sizeof(node));
 		if (n != NULL) {
+			n->key = key;
 			n->value = value;
 			n->left = NULL;
 			n->right = NULL;
 			n->color = 2;
 			n->parent = NULL;
-
 			t->root = n;
 		}
 		return;
 	}
 	else {
 		t->size++;
-		insert(t, value);
+		insert(t, key, value);
 	}
 }
 
@@ -262,13 +262,13 @@ void fixDeleting(tree* t, node* p, node* p_parent) {
 		t->root->color = 2;
 }
 
-void delete_value(tree* t,int value) {
+void delete_value(tree* t, char* key) {
 	node* p = t->root;
 	node* y = NULL;
 	node* q = NULL;
 
-	while (p != NULL && p->value != value) {
-		if (value < p->value)
+	while (p != NULL && p->key != key) {
+		if (strcmp(key, p->key) < 0)
 			p = p->left;
 		else
 			p = p->right;
@@ -311,7 +311,7 @@ void delete_value(tree* t,int value) {
 	}
 
 	if (y != p) {
-		p->value = y->value;
+		p->key = y->key;
 	}
 	if (y->color == 2) {
 		fixDeleting(t,q,y->parent);
@@ -335,9 +335,9 @@ void print_node(node* node, int depth) {
 		printf("\t");
 	}
 	if(node->color==1)
-		printf("[%d]", node->value);
+		printf("[%s %lf]", node->key, node->value);
 	else
-		printf("(%d)", node->value);
+		printf("(%s %lf)", node->key, node->value);
 	print_node(node->left, depth + 1);
 }
 
