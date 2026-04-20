@@ -60,59 +60,53 @@ void rotate_right(node* n) {
 	p->right = n;
 }
 
-void fixInsertion(node* tree,bool is_root) {
+void fixInsertion(node* tree, bool is_root) {
 	if (is_root) {
 		tree->color = 2;
 		return;
 	}
+
 	while (tree->parent != NULL && tree->parent->color == 1) {
-		if (tree->parent->left == tree) {
-			if (tree->parent->parent != NULL && ((tree->parent->parent->left != NULL && tree->parent->parent->left != tree->parent && tree->parent->parent->left->color == 1) || (tree->parent->parent->right != NULL && tree->parent->parent->right != tree->parent && tree->parent->parent->right->color == 1))) {
-				//красный дядя
-				tree->parent->parent->color = 1;
-				if (tree->parent->parent->left != NULL && tree->parent->parent->left != tree->parent)
-					tree->parent->parent->left->color = 2;
-				else
-					tree->parent->parent->right->color = 2;
+		if (tree->parent == tree->parent->parent->left) {
+			node* uncle = tree->parent->parent->right;
+
+			if (uncle != NULL && uncle->color == 1) {
 				tree->parent->color = 2;
+				uncle->color = 2;
+				tree->parent->parent->color = 1;
 				tree = tree->parent->parent;
 			}
 			else {
-				if (tree->parent->right == tree) {
+				if (tree == tree->parent->right) {
 					tree = tree->parent;
 					rotate_left(tree);
 				}
 				tree->parent->color = 2;
-				if (tree->parent->parent != NULL) {
-					tree->parent->parent->color = 1;
-					rotate_right(tree->parent->parent);
-				}
+				tree->parent->parent->color = 1;
+				rotate_right(tree->parent->parent);
 			}
 		}
 		else {
-			if (tree->parent->parent != NULL && ((tree->parent->parent->left != NULL && tree->parent->parent->left != tree->parent && tree->parent->parent->left->color == 1) || (tree->parent->parent->right != NULL && tree->parent->parent->right != tree->parent && tree->parent->parent->right->color == 1))) {
-				//красный дядя
-				tree->parent->parent->color = 1;
-				if (tree->parent->parent->left != NULL && tree->parent->parent->left != tree->parent)
-					tree->parent->parent->left->color = 2;
-				else
-					tree->parent->parent->right->color = 2;
+			node* uncle = tree->parent->parent->left;
+
+			if (uncle != NULL && uncle->color == 1) {
 				tree->parent->color = 2;
+				uncle->color = 2;
+				tree->parent->parent->color = 1;
 				tree = tree->parent->parent;
 			}
 			else {
-				if (tree->parent->left == tree) {
+				if (tree == tree->parent->left) {
 					tree = tree->parent;
 					rotate_right(tree);
 				}
 				tree->parent->color = 2;
-				if (tree->parent->parent != NULL) {
-					tree->parent->parent->color = 1;
-					rotate_left(tree->parent->parent);
-				}
+				tree->parent->parent->color = 1;
+				rotate_left(tree->parent->parent);
 			}
 		}
 	}
+
 	node* root = tree;
 	while (root->parent != NULL)
 		root = root->parent;
@@ -223,6 +217,9 @@ void fixDeleting(tree* t, node* p, node* p_parent) {
 			//p — правый ребенок
 			node* b = p_parent->left;
 
+			if (b == NULL)
+				break;
+
 			if (b != NULL && b->color == 1) {
 				b->color = 2;
 				p_parent->color = 1;
@@ -312,6 +309,7 @@ void delete_value(tree* t, char* key) {
 
 	if (y != p) {
 		p->key = y->key;
+		p->value = y->value;
 	}
 	if (y->color == 2) {
 		fixDeleting(t,q,y->parent);
