@@ -1,7 +1,6 @@
 #pragma once
 typedef struct node {
 	int value;
-	int depth;
 	int color; //1 - red, 2 - black
 	node* parent;
 	node* left;
@@ -13,15 +12,19 @@ typedef struct {
 	node* root;
 }tree;
 
+void search(tree* t, int value);
+
+void rotate_left(node* tree);
+
+void rotate_right(node* tree);
+
 void insert(tree* tree, int value);
 
 void fixInsertion(node* tree, bool is_root);
 
 void add_el(tree* t, int value);
 
-void print(tree* tree);
-
-void add_to_tree_from_branch_min(tree* t, node* el);
+void fixDeleting(tree* t, node* p, node* p_parent);
 
 void delete_value(tree* t, int value);
 

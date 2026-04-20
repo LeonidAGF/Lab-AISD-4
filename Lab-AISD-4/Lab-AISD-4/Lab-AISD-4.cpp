@@ -23,7 +23,8 @@ int main()
 			printf("\n");
 			break;
 		case 4:
-			print_tree(&tree);
+			scanf_s("%d", &input_value);
+			search(&tree,input_value);
 			printf("\n");
 			break;
 		case 5:
