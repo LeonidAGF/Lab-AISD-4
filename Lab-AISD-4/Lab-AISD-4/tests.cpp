@@ -76,8 +76,8 @@ int test1() {
 	delete_value(&tree, s5);
 	delete_value(&tree, s1);
 	
-	search(&tree, s2);
-	print_tree(&tree);
+	search(&tree, s2,stdout);
+	print_tree(&tree,stdout);
 
 	while (tree.root != NULL)
 		delete_value(&tree, tree.root->key);

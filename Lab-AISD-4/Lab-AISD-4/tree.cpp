@@ -4,7 +4,7 @@
 #include <stdbool.h>
 #include <string.h>
 
-void search(tree* t, char * key) {
+void search(tree* t, char * key, FILE* stream) {
 	node* p = t->root;
 	while (p != NULL && p->key != key) {
 		if (strcmp(key, p->key)<0)
@@ -13,9 +13,10 @@ void search(tree* t, char * key) {
 			p = p->right;
 	}
 	if(p!=NULL && p->key==key)
-		printf("%s %lf", p->key,p->value);
+		fprintf(stream,"%s %lf", p->key,p->value);
 	else
-		printf("not found");
+		fprintf(stream,"not found");
+	fprintf(stream, "\n");
 }
 
 void rotate_left(node* n) {
@@ -323,23 +324,24 @@ void delete_value(tree* t, char* key) {
 	free(y);
 }
 
-void print_node(node* node, int depth) {
+void print_node(node* node, int depth, FILE* stream) {
 	if (node == NULL) {
 		return;
 	}
-	print_node(node->right, depth + 1);
+	print_node(node->right, depth + 1,stream);
 	printf("\n");
 	for (int i = 0; i < depth; i++) {
 		printf("\t");
 	}
 	if(node->color==1)
-		printf("[%s %lf]", node->key, node->value);
+		fprintf(stream,"[%s %lf]", node->key, node->value);
 	else
-		printf("(%s %lf)", node->key, node->value);
-	print_node(node->left, depth + 1);
+		fprintf(stream,"(%s %lf)", node->key, node->value);
+	print_node(node->left, depth + 1, stream);
 }
 
-void print_tree(tree* tree) {
-	print_node(tree->root, 0);
+void print_tree(tree* tree, FILE* stream) {
+	print_node(tree->root, 0, stream);
+	fprintf(stream, "\n");
 	return;
 }

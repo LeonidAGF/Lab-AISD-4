@@ -1,4 +1,7 @@
 #pragma once
+#include <stdio.h>
+#include <stdlib.h>
+
 typedef struct node {
 	int color; //1 - red, 2 - black
 	double value;
@@ -13,7 +16,7 @@ typedef struct {
 	node* root;
 }tree;
 
-void search(tree* t, char * key);
+void search(tree* t, char * key, FILE* stream);
 
 void rotate_left(node* tree);
 
@@ -29,6 +32,6 @@ void fixDeleting(tree* t, node* p, node* p_parent);
 
 void delete_value(tree* t, char * key);
 
-void print_node(node* node, int depth);
+void print_node(node* node, int depth, FILE* stream);
 
-void print_tree(tree* tree);
+void print_tree(tree* tree, FILE* stream);

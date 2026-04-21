@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include <stdlib.h>
 #include "tree.h"
 #include "tests.h"
@@ -22,11 +21,20 @@ int main() {
 		printf("error in test5\n");
 
 	tree tree = { 0,NULL };
-	int input_com;
+	int input_com,output_com;
 	double input_value;
+
+	FILE* stream = stdout;
+
 
 	printf("choose mode: from file - 1, from console - 2\n");
 	scanf_s("%d", &input_com);
+	printf("choose mode to write answers: to console - 1, to file - 2\n");
+	scanf_s("%d", &output_com);
+
+	if (output_com == 2)
+		if (fopen_s(&stream, "res.txt", "w") != 0)
+			return 0;
 
 	if (input_com == 1) {
 		printf("file name:\n");
@@ -88,8 +96,7 @@ int main() {
 				delete_value(&tree, str);
 				break;
 			case '3':
-				print_tree(&tree);
-				printf("\n");
+				print_tree(&tree, stream);
 				break;
 			case '4':
 				pos_data += 2;
@@ -99,8 +106,7 @@ int main() {
 					str_pos++;
 					pos_data++;
 				}
-				search(&tree, str);
-				printf("\n");
+				search(&tree, str, stream);
 				break;
 			case '5':
 				while (tree.root != NULL)
@@ -131,13 +137,11 @@ int main() {
 				delete_value(&tree, str);
 				break;
 			case 3:
-				print_tree(&tree);
-				printf("\n");
+				print_tree(&tree, stream);
 				break;
 			case 4:
 				scanf_s("%6s", str, 7);
-				search(&tree, str);
-				printf("\n");
+				search(&tree, str, stream);
 				break;
 			case 5:
 				while (tree.root != NULL)
@@ -148,5 +152,9 @@ int main() {
 			}
 		}
 	}
+
+	if (output_com == 2)
+		fclose(stream);
+
 	return 0;
 }
